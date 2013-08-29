@@ -89,6 +89,24 @@ describe UberModel::Attribute do
     its(:number?) { should be_true }
   end
 
+  context 'with a :decimal type' do
+    subject { mock_attribute(:test, :decimal) }
+    before do
+      @bigd = BigDecimal.new(1.234.to_s)
+    end
+    it { should type_cast('').to(0) }
+    it { should type_cast('foo').to(0) }
+    it { should type_cast(123).to(123) }
+    it { should type_cast(1.23).to(1.23) }
+    it { should type_cast(@date_obj).to(nil) }
+    it { should type_cast(@datetime_obj).to(@datetime_obj.to_s.to_d) }
+    it { should type_cast(true).to(nil) }
+    it { should type_cast(false).to(nil) }
+    it { should type_cast(nil).to(nil) }
+    its(:number?) { should be_true }
+    specify { subject.type_cast(@bigd).should eq(@bigd) }
+  end
+
   context 'with a :date type' do
     subject { mock_attribute(:test, :date) }
     it { should type_cast('').to(nil) }

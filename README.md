@@ -1,6 +1,15 @@
 # UberModel
 
-TODO: Write a gem description
+UberModel connects your legacy datasource to your ruby application, allowing
+you to map legacy calls (TCP server, non-relational DB, etc) to Ruby models.
+
+Tight integration exists between UberModel and ActiveRecord, allowing for
+2-way associations that are handled transparently.
+
+Unlike ActiveRecord, model attributes are defined manually by the user.  Data
+access is handled by custom adapters, written by the user, which specify how to
+interact with your datasource.  Each UberModel class will have a model module
+that shadows it, specifying how to perform the 4 CRUD actions.
 
 ## Installation
 

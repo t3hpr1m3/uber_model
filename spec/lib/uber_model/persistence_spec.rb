@@ -27,19 +27,19 @@ describe UberModel::Persistence do
   its(:persisted?) { should be_false }
 
   it 'should trigger the proper validations on create' do
-    subject.stubs(persisted?: false, new_record?: true)
+    subject.stub(persisted?: false, new_record?: true)
     subject.test = 'foo'
     subject.save.should be_false
   end
 
   it 'should trigger the proper validations on update' do
-    subject.stubs(persisted?: true, new_record?: false)
+    subject.stub(persisted?: true, new_record?: false)
     subject.test = 'foo'
     subject.save.should be_true
   end
 
   it 'should trigger the destroy callback' do
-    subject.expects(:destroy_callback)
+    subject.should_receive(:destroy_callback)
     subject.destroy
   end
 end

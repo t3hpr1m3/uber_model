@@ -22,11 +22,11 @@ Gem::Specification.new do |gem|
   gem.add_development_dependency 'activerecord', '~> 3.1.12'
 
   gem.add_development_dependency 'rspec'
-  gem.add_development_dependency 'mocha'
   gem.add_development_dependency 'guard-rspec'
   gem.add_development_dependency 'libnotify'
   gem.add_development_dependency 'simplecov'
   gem.add_development_dependency 'yard'
   gem.add_development_dependency 'sqlite3'
   gem.add_development_dependency 'factory_girl'
+  gem.add_development_dependency 'redcarpet'
 end

@@ -1,11 +1,21 @@
+require 'bigdecimal'
+require 'bigdecimal/util'
+
 module UberModel
   class UnsupportedType < UberModelError; end
   class InvalidConversion < UberModelError; end
 
+  # Attributes are persistable characteristics of a model, explicitly defined
+  # by the user.
+  #
+  # By default, all attributes are initialized with a value of nil.
   class Attribute
     attr_reader :name, :type, :default
+    attr_accessor :coder
 
-    VALID_TYPES = [:string, :integer, :float, :date, :datetime, :boolean]
+    alias :encoded? :coder
+
+    VALID_TYPES = [:string, :integer, :float, :decimal, :date, :datetime, :boolean]
 
     TRUE_VALUES = [true, 1, '1', 't', 'T', 'true', 'TRUE'].to_set
     FALSE_VALUES = [false, 0, '0', 'f', 'F', 'false', 'FALSE'].to_set
@@ -15,6 +25,8 @@ module UberModel
       ISO_DATETIME = /\A(\d{4})-(\d\d)-(\d\d) (\d\d):(\d\d):(\d\d)(\.\d+)?\z/
     end
 
+    #
+    # Initializes a new Attribute object.  See {UberModel::AttributeMethods::ClassMethods#attribute attribute}
     def initialize(name, type, options = {})
       @name, @type = name.to_s, type
       @default = options.delete(:default)
@@ -23,21 +35,27 @@ module UberModel
     end
 
     def number?
-      [:integer, :float].include?(@type)
+      [:integer, :float, :decimal].include?(@type)
     end
 
     def type_cast(value)
       return nil if value.nil?
+      return coder.load(value) if encoded?
 
       klass = self.class
       case type
-      when :string, :text  then value.to_s
-      when :integer        then klass.value_to_integer(value)
-      when :float          then value.to_f rescue nil
-      when :date           then klass.value_to_date(value)
-      when :datetime       then klass.value_to_time(value)
-      when :boolean        then klass.value_to_boolean(value)
+      when :string      then value.to_s
+      when :integer     then klass.value_to_integer(value)
+      when :float       then value.to_f rescue nil
+      when :decimal     then klass.value_to_decimal(value)
+      when :date        then klass.value_to_date(value)
+      when :datetime    then klass.value_to_time(value)
+      when :boolean     then klass.value_to_boolean(value)
       end
+    end
+
+    def type_cast_for_write(value)
+      value
     end
 
     class << self
@@ -55,6 +73,16 @@ module UberModel
           nil
         else
           TRUE_VALUES.include?(value)
+        end
+      end
+
+      def value_to_decimal(value)
+        if value.class == BigDecimal
+          value
+        elsif value.respond_to?(:to_d)
+          value.to_d
+        else
+          value.to_s.to_d
         end
       end
 

@@ -9,13 +9,13 @@ describe UberModel::Identity do
   its(:to_model) { should eql(subject) }
 
   context 'when persisted' do
-    before { subject.stubs(persisted?: true) }
+    before { subject.stub(persisted?: true) }
     its(:to_param) { should eql('123') }
     its(:to_key) { should eql([123]) }
   end
 
   context 'when not persisted' do
-    before { subject.stubs(persisted?: false) }
+    before { subject.stub(persisted?: false) }
     its(:to_param) { should be_nil }
     its(:to_key) { should be_nil }
   end

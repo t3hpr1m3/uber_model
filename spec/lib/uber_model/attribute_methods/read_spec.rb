@@ -12,4 +12,12 @@ describe UberModel::AttributeMethods::Read do
     subject.primary = 123
     subject.read_attribute(:id).should eql(123)
   end
+
+  describe '_before_type_cast' do
+    it 'should return the raw value' do
+      subject.test = 1
+      subject.test_before_type_cast.should eql(1)
+      subject.test.should eql('1')
+    end
+  end
 end
