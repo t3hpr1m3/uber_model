@@ -10,5 +10,5 @@ RSpec::Core::RakeTask.new(:spec) do |t|
 end
 
 YARD::Rake::YardocTask.new do |t|
-  t.options = ['--exclude', 'generators']
+  t.options = ['--exclude', 'generators', '--list-undoc']
 end

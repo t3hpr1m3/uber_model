@@ -26,7 +26,6 @@ module UberModel
       # @param name [Symbol] Name of the attribute
       # @param data_type [Symbol] One of the suppored
       #   {UberModel::Attribute::VALID_TYPES data types}
-      # @param default [Object] Default value for this attribute (nil if not
       #   supplied)
       # A default value for this attribute can be passed as the third argument.
       #

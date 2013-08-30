@@ -17,5 +17,6 @@ module UberModel
   autoload :Identity
   autoload :Logging
   autoload :Persistence
+  autoload :Predicate
   autoload :Validation
 end

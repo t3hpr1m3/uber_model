@@ -1,4 +1,7 @@
 module UberModel
+  #
+  # Allows UberModel instances to perform validations on attributes, and set callbacks on the various CRUD actions.
+  #
   module Validation
     extend ActiveSupport::Concern
     include ActiveModel::Validations
@@ -9,6 +12,10 @@ module UberModel
       define_model_callbacks :save, :create, :update, :destroy, :reload
     end
 
+    #
+    # Wrapper for the real {UberModel::Persistence#save save} method, to allow
+    # validations to run.
+    #
     def save(options = {})
       perform_validations(options) ? super : false
     end
